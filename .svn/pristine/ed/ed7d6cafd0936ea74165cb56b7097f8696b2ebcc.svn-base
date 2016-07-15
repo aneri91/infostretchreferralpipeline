@@ -1,0 +1,43 @@
+package com.infostretch.referral.utilities;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.stereotype.Component;
+
+@Component
+@EnableAsync
+public class SendMail {
+
+	@Autowired
+	private VelocityEngine velocityEngine;
+
+	@Autowired
+	private JavaMailSender mailSender;
+
+	@Async
+	public void sendEmail(String [] to, String body, String from,String subject) {
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+		try {
+			helper.setFrom(from);
+			helper.setSubject(subject);
+			helper.setTo(to);
+			helper.setText(body, true);
+
+			mailSender.send(message);
+		} catch (MailException ex) {
+			System.err.println(ex.getMessage());
+		} catch (MessagingException me) {
+			System.out.println("e-mail exception " + me.getMessage());
+		}
+	}
+}

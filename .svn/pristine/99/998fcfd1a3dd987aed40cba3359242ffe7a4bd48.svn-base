@@ -1,0 +1,31 @@
+package com.infostretch.referral.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.infostretch.referral.commons.LoginInputDTO;
+import com.infostretch.referral.commons.LoginResponseDTO;
+import com.infostretch.referral.exception.RESTServiceException;
+import com.infostretch.referral.services.LoginService;
+
+@Controller
+public class loginController {
+
+	@Autowired
+	private LoginService loginService;
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseBody
+	public LoginResponseDTO loginAuthentication(@RequestBody LoginInputDTO loginDTO) throws RESTServiceException {
+		System.out.println(" user name "+loginDTO.getUsername());
+		System.out.println(" password "+loginDTO.getPassword());
+		return loginService.validateLDAPUser(loginDTO.getUsername(),loginDTO.getPassword());
+//		return employeeReferralService.saveEmployeeReferral(employeeReferralDTO);
+	}
+	
+}

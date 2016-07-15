@@ -1,0 +1,72 @@
+package com.infostretch.referral.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.springframework.stereotype.Repository;
+
+import com.infostretch.referral.entity.User;
+import com.infostretch.referral.exception.RESTServiceException;
+
+/**
+ * The Class UserDaoImpl.
+ * @author pratik.oza
+ */
+@Repository("userDao")
+public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
+  /** The entity manager. */
+  @PersistenceContext
+  private EntityManager entityManager;
+
+  /**
+   * Instantiates a new user dao impl.
+   */
+  public UserDaoImpl() {
+    super(User.class);
+  }
+
+  /**
+   * Gets the user id byusername.
+   *
+   * @param username
+   *          the username
+   * @return the user id byusername
+   * @throws RESTServiceException
+   *           the REST service exception
+   * @see com.infostretch.referral.dao.UserDao#getUserIdByusername(java.lang.String)
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public Integer getUserIdByusername(final String username) throws RESTServiceException {
+    final Query query = this.entityManager
+        .createQuery(" SELECT u FROM User u WHERE u.name=:username ");
+    query.setParameter("username", username);
+    final List<User> userList = query.getResultList();
+    if (!userList.isEmpty()) {
+      return userList.get(0).getId();
+    } else {
+      return 0;
+    }
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.infostretch.referral.dao.UserDao#getUsersByUsernamePassword(java.lang.String,
+   * java.lang.String)
+   */
+  @Override
+  public List<User> getUsersByUsernamePassword(final String username,
+      final String password) throws RESTServiceException {
+    final Query query = this.entityManager
+        .createQuery(" SELECT u FROM User u WHERE u.name=:username AND u.password=:password");
+    query.setParameter("username", username);
+    query.setParameter("password", password);
+    @SuppressWarnings("unchecked")
+    final List<User> userList = query.getResultList();
+    return userList;
+  }
+}

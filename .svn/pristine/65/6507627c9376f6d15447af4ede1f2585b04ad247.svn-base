@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+</head>
+
+<body>
+Hi hr.admin<br/>
+<br/>
+Infostretch Employee: ${createdBy}<br/>
+Referral Name: ${candidateName} <br/>
+Referral Email: ${email}<br/>
+Referral Phone: ${phone}<br/>
+LinkedUrl: ${linkedinUrl}<br/>
+Created Date: ${createdOn}<br/>
+<br/>
+Thank you
+ 
+</body>
+</html>

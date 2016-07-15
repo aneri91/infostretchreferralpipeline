@@ -1,0 +1,71 @@
+package com.infostretch.referral.utilities;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * The Class ObjectUtils.
+ *
+ * @author aneri.parikh
+ */
+public final class ObjectUtils {
+
+  /** The log. */
+  private static final Log LOG = LogFactory.getLog(ObjectUtils.class);
+
+  /**
+   * Instantiates a new object utils.
+   *
+   * Default Constructor
+   */
+  private ObjectUtils() {
+
+  }
+
+  /**
+   * Clones Mutable object for security reasons.
+   *
+   * @param <T>
+   *          the generic type
+   * @param obj
+   *          represents Date
+   * @return the t result cloned entity
+   */
+  @SuppressWarnings("unchecked")
+  public static <T extends Cloneable> T clone(final T obj) {
+    if (LOG.isInfoEnabled()) {
+      LOG.info("clone(" + obj + ") called!");
+    }
+    // checking null
+    if (obj != null) {
+      if (obj.getClass().isArray()) {
+        // cloned object
+        final Object result;
+        final Class<?> componentType = obj.getClass().getComponentType();
+        if (!componentType.isPrimitive()) {
+          result = ((Object[]) obj).clone();
+        } else {
+          int length = Array.getLength(obj);
+          result = Array.newInstance(componentType, length);
+          // reading object array
+          while (length-- > 0) {
+            Array.set(result, length, Array.get(obj, length));
+          }
+        }
+        return (T) result;
+      } else {
+        try {
+          return (T) obj.getClass().getMethod("clone").invoke(obj);
+        } catch (final IllegalAccessException | IllegalArgumentException
+            | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+          LOG.error("Clone not supported!", e);
+          return null;
+        }
+      }
+    }
+    return null;
+  }
+}

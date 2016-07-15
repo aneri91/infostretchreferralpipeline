@@ -1,0 +1,55 @@
+package com.infostretch.referral.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.springframework.stereotype.Repository;
+
+import com.infostretch.referral.entity.UserRoleMapping;
+import com.infostretch.referral.exception.RESTServiceException;
+
+/**
+ * The Class UserRoleDaoImpl.
+ *
+ * @author pratik.oza
+ *
+ */
+@Repository("userRoleDao")
+public class UserRoleDaoImpl extends GenericDaoImpl<UserRoleMapping> implements UserRoleDao {
+
+  /** The entity manager. */
+  @PersistenceContext
+  private EntityManager entityManager;
+
+  /**
+   * Instantiates a new user role dao impl.
+   */
+  public UserRoleDaoImpl() {
+    super(UserRoleMapping.class);
+  }
+
+  /**
+   * @see com.infostretch.referral.dao.UserRoleDao#getRoleByUserId(java.lang.Integer)
+   */
+  @Override
+  public String getRoleByUserId(final Integer userId) throws RESTServiceException {
+    // Query
+    final Query query = this.entityManager
+        .createQuery("SELECT r.role.roleName from UserRoleMapping r WHERE r.user.id=:userId");
+    // sets the paramater userId
+    query.setParameter("userId", userId);
+    @SuppressWarnings("unchecked")
+    // List of Roles
+    final List<String> roleList = query.getResultList();
+    // checks roleList is empty or not
+    if (!roleList.isEmpty()) {
+      return roleList.get(0);
+    } else {
+      // return null
+      return null;
+    }
+  }
+}

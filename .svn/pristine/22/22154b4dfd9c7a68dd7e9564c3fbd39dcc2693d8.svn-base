@@ -1,0 +1,219 @@
+package com.infostretch.referral.entity;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.List;
+
+
+/**
+ * The persistent class for the user database table.
+ * 
+ */
+@Entity
+@Table(name="user")
+@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(length=200)
+	private String email;
+
+	@Column(length=200)
+	private String name;
+
+	@Column(length=200)
+	private String password;
+	
+	@Column(length=100)
+	private String firstname;
+
+	@Column(length=100)
+	private String lastname;
+
+	//bi-directional many-to-one association to EmployeeReferral
+	@OneToMany(mappedBy="createdBy")
+	private List<EmployeeReferral> employeeReferrals1;
+
+	//bi-directional many-to-one association to EmployeeReferral
+	@OneToMany(mappedBy="updatedBy")
+	private List<EmployeeReferral> employeeReferrals2;
+
+	//bi-directional many-to-one association to SalesReferral
+	@OneToMany(mappedBy="createdBy")
+	private List<SalesReferral> salesReferrals1;
+
+	//bi-directional many-to-one association to SalesReferral
+	@OneToMany(mappedBy="updatedBy")
+	private List<SalesReferral> salesReferrals2;
+
+	//bi-directional many-to-one association to UserRoleMapping
+	@OneToMany(mappedBy="user")
+	private List<UserRoleMapping> userRoleMappings;
+
+	public User() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public List<EmployeeReferral> getEmployeeReferrals1() {
+		return this.employeeReferrals1;
+	}
+
+	public void setEmployeeReferrals1(List<EmployeeReferral> employeeReferrals1) {
+		this.employeeReferrals1 = employeeReferrals1;
+	}
+
+	public EmployeeReferral addEmployeeReferrals1(EmployeeReferral employeeReferrals1) {
+		getEmployeeReferrals1().add(employeeReferrals1);
+		employeeReferrals1.setCreatedBy(this);
+
+		return employeeReferrals1;
+	}
+
+	public EmployeeReferral removeEmployeeReferrals1(EmployeeReferral employeeReferrals1) {
+		getEmployeeReferrals1().remove(employeeReferrals1);
+		employeeReferrals1.setCreatedBy(null);
+
+		return employeeReferrals1;
+	}
+
+	public List<EmployeeReferral> getEmployeeReferrals2() {
+		return this.employeeReferrals2;
+	}
+
+	public void setEmployeeReferrals2(List<EmployeeReferral> employeeReferrals2) {
+		this.employeeReferrals2 = employeeReferrals2;
+	}
+
+	public EmployeeReferral addEmployeeReferrals2(EmployeeReferral employeeReferrals2) {
+		getEmployeeReferrals2().add(employeeReferrals2);
+		employeeReferrals2.setUpdatedBy(this);
+
+		return employeeReferrals2;
+	}
+
+	public EmployeeReferral removeEmployeeReferrals2(EmployeeReferral employeeReferrals2) {
+		getEmployeeReferrals2().remove(employeeReferrals2);
+		employeeReferrals2.setUpdatedBy(null);
+
+		return employeeReferrals2;
+	}
+
+	public List<SalesReferral> getSalesReferrals1() {
+		return this.salesReferrals1;
+	}
+
+	public void setSalesReferrals1(List<SalesReferral> salesReferrals1) {
+		this.salesReferrals1 = salesReferrals1;
+	}
+
+	public SalesReferral addSalesReferrals1(SalesReferral salesReferrals1) {
+		getSalesReferrals1().add(salesReferrals1);
+		salesReferrals1.setCreatedBy(this);
+
+		return salesReferrals1;
+	}
+
+	public SalesReferral removeSalesReferrals1(SalesReferral salesReferrals1) {
+		getSalesReferrals1().remove(salesReferrals1);
+		salesReferrals1.setCreatedBy(this);
+
+		return salesReferrals1;
+	}
+
+	public List<SalesReferral> getSalesReferrals2() {
+		return this.salesReferrals2;
+	}
+
+	public void setSalesReferrals2(List<SalesReferral> salesReferrals2) {
+		this.salesReferrals2 = salesReferrals2;
+	}
+
+	public SalesReferral addSalesReferrals2(SalesReferral salesReferrals2) {
+		getSalesReferrals2().add(salesReferrals2);
+		salesReferrals2.setUpdatedBy(this);
+
+		return salesReferrals2;
+	}
+
+	public SalesReferral removeSalesReferrals2(SalesReferral salesReferrals2) {
+		getSalesReferrals2().remove(salesReferrals2);
+		salesReferrals2.setUpdatedBy(null);
+
+		return salesReferrals2;
+	}
+
+	public List<UserRoleMapping> getUserRoleMappings() {
+		return this.userRoleMappings;
+	}
+
+	public void setUserRoleMappings(List<UserRoleMapping> userRoleMappings) {
+		this.userRoleMappings = userRoleMappings;
+	}
+
+	public UserRoleMapping addUserRoleMapping(UserRoleMapping userRoleMapping) {
+		getUserRoleMappings().add(userRoleMapping);
+		userRoleMapping.setUser(this);
+
+		return userRoleMapping;
+	}
+
+	public UserRoleMapping removeUserRoleMapping(UserRoleMapping userRoleMapping) {
+		getUserRoleMappings().remove(userRoleMapping);
+		userRoleMapping.setUser(null);
+
+		return userRoleMapping;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+}

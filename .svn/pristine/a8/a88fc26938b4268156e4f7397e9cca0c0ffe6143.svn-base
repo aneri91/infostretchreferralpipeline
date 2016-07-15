@@ -1,0 +1,21 @@
+package com.infostretch.referral.dao;
+
+import org.springframework.stereotype.Repository;
+
+import com.infostretch.referral.entity.EmployeeReferral;
+
+/**
+ * The Class EmployeeReferralDaoImpl.
+ */
+@Repository("employeeReferralDao")
+public class EmployeeReferralDaoImpl extends GenericDaoImpl<EmployeeReferral> implements
+EmployeeReferralDao {
+
+  /**
+   * Instantiates a new employee referral dao impl.
+   */
+  public EmployeeReferralDaoImpl() {
+    super(EmployeeReferral.class);
+  }
+
+}

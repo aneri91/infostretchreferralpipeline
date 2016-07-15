@@ -1,0 +1,71 @@
+package com.infostretch.referral.entity;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.List;
+
+
+/**
+ * The persistent class for the role database table.
+ * 
+ */
+@Entity
+@Table(name="role")
+@NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
+public class Role implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(name="role_name", length=200)
+	private String roleName;
+
+	//bi-directional many-to-one association to UserRoleMapping
+	@OneToMany(mappedBy="role")
+	private List<UserRoleMapping> userRoleMappings;
+
+	public Role() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getRoleName() {
+		return this.roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public List<UserRoleMapping> getUserRoleMappings() {
+		return this.userRoleMappings;
+	}
+
+	public void setUserRoleMappings(List<UserRoleMapping> userRoleMappings) {
+		this.userRoleMappings = userRoleMappings;
+	}
+
+	public UserRoleMapping addUserRoleMapping(UserRoleMapping userRoleMapping) {
+		getUserRoleMappings().add(userRoleMapping);
+		userRoleMapping.setRole(this);
+
+		return userRoleMapping;
+	}
+
+	public UserRoleMapping removeUserRoleMapping(UserRoleMapping userRoleMapping) {
+		getUserRoleMappings().remove(userRoleMapping);
+		userRoleMapping.setRole(null);
+
+		return userRoleMapping;
+	}
+
+}

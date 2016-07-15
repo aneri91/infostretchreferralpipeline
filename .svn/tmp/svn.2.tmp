@@ -1,0 +1,62 @@
+package com.infostretch.referral.dao;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * The Class GenericDaoImpl.
+ *
+ * @param <T>
+ *          the generic type
+ */
+public class GenericDaoImpl<T> implements GenericDao<T> {
+
+  /** The type. */
+  private final Class<T> type;
+
+  /** The entity manager. */
+  @PersistenceContext
+  private EntityManager entityManager;
+
+  /**
+   * Instantiates a new generic dao impl.
+   *
+   * @param type
+   *          the type
+   */
+  public GenericDaoImpl(final Class<T> type) {
+    super();
+    this.type = type;
+
+  }
+
+  /**
+   * @see com.infostretch.referral.dao.GenericDao#findById(java.lang.Integer)
+   */
+  @Override
+  public T findById(final Integer id) {
+    return this.entityManager.find(this.type, id);
+  }
+
+  /**
+   *
+   * @see com.infostretch.referral.dao.GenericDao#save(java.lang.Object)
+   */
+  @Transactional(readOnly = false)
+  @Override
+  public void save(final T entity) {
+    this.entityManager.persist(entity);
+
+  }
+
+  /**
+   * @see com.infostretch.referral.dao.GenericDao#update(java.lang.Object)
+   */
+  @Override
+  public void update(final T object) {
+    // TODO Auto-generated method stub
+
+  }
+}

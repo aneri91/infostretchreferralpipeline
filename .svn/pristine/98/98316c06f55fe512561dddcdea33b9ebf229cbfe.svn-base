@@ -1,0 +1,35 @@
+package com.infostretch.referral.exception;
+
+import com.infostretch.referral.commons.Status;
+
+public class RESTServiceException extends Exception {
+
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = 1L;
+
+	/** status information for rest response */
+	private final Status status;
+
+	/**
+	 * Instantiates a new rest service exception.
+	 */
+	public RESTServiceException(final String value, final Throwable throwable) {
+		super(value, throwable);
+		this.status = new Status(value);
+	}
+
+	/**
+	 * Instantiates a new rest service exception.
+	 */
+	public RESTServiceException(final String value, final Integer code, final Throwable throwable) {
+		super(value, throwable);
+		this.status = new Status(value, code);
+	}
+
+	/**
+	 * @return the status
+	 */
+	public Status getStatus() {
+		return this.status;
+	}
+}

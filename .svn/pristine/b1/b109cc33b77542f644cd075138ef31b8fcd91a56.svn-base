@@ -1,0 +1,5 @@
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://10.12.40.115/infostretchreferralsql
+jdbc.username=kunal
+jdbc.password=kunal123#
+hibernate.dialectClassName=org.hibernate.dialect.MySQLDialect

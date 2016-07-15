@@ -1,0 +1,75 @@
+package com.infostretch.referral.services;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.velocity.VelocityEngineUtils;
+
+import com.infostretch.referral.commons.SalesReferralDTO;
+import com.infostretch.referral.commons.Status;
+import com.infostretch.referral.commons.StatusDTO;
+import com.infostretch.referral.dao.SalesReferralDao;
+import com.infostretch.referral.dao.UserDao;
+import com.infostretch.referral.entity.SalesReferral;
+import com.infostretch.referral.entity.User;
+import com.infostretch.referral.utilities.SendMail;
+
+@Service
+public class SalesReferralService {
+
+	@Autowired
+	private SalesReferralDao salesReferralDao;
+
+	@Autowired
+	private UserDao userDao;
+
+	@Autowired
+	private VelocityEngine velocityEngine;
+
+	@Autowired
+	private SendMail sendMail;
+
+	public StatusDTO saveSalesReferral(SalesReferralDTO salesReferralDTO) {
+		StatusDTO status = new StatusDTO();
+		SalesReferral salesReferral = new SalesReferral();
+		salesReferral.setCompanyName(salesReferralDTO.getCompanyName());
+		salesReferral.setEmail(salesReferralDTO.getEmail());
+		salesReferral.setContactName(salesReferralDTO.getContactName());
+		salesReferral.setPhone(salesReferralDTO.getPhone());
+		salesReferral.setComments(salesReferralDTO.getComments());
+		salesReferral.setCreatedOn(new Date());
+		salesReferral.setUpdatedOn(new Date());
+		User createdBy = userDao.findById(salesReferralDTO.getCreatedBy());
+		salesReferral.setCreatedBy(createdBy);
+		salesReferralDao.save(salesReferral);
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		model.put("companyName", salesReferralDTO.getCompanyName());
+		model.put("contactName", salesReferralDTO.getContactName());
+		model.put("email", salesReferralDTO.getEmail());
+		model.put("phone", salesReferralDTO.getPhone());
+		model.put("comments", salesReferralDTO.getComments());
+		model.put("createdOn", salesReferral.getCreatedOn());
+		model.put("createdBy", createdBy.getFirstname()+" "+createdBy.getLastname());
+
+		String body = VelocityEngineUtils.mergeTemplateIntoString(
+				velocityEngine, "/templates/salesReferralTemplate.vm", "UTF-8",
+				model);
+		String[] to = { "pratik.oza@infostretch.com",
+				"aneri.parikh@infostretch.com",
+				"vaibhavi.joshi@infostretch.com",
+				"mudita.tiwari@infostretch.com",
+				"pooja.arondekar@infostretch.com" };
+
+		sendMail.sendEmail(to, body, "aneri.parikh@infostretch.com",
+				"New Referral Information");
+		status.setStatus(new Status("success"));
+		return status;
+
+	}
+
+}

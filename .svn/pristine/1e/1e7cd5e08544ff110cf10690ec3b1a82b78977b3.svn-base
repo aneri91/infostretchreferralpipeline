@@ -1,0 +1,84 @@
+package com.infostretch.referral.commons;
+
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
+/**
+ * Status of REST service response
+ *
+ * @author aneri.parikh
+ *
+ */
+public class Status implements Serializable {
+
+	/**
+	 * default
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String message;
+	private Integer code;
+
+	/**
+	 * default status instance with code 0 & code specified false
+	 */
+	public Status() {
+		this.code = 200;
+	}
+
+	/**
+	 * Creates instance with values as per mentioned and code 0 & codeSpecified
+	 * false
+	 *
+	 * @param message
+	 */
+	public Status(final String value) {
+		this();
+		this.message = value;
+	}
+
+	/**
+	 * Creates instance with values & code as per mentioned and codeSpecified
+	 * false
+	 *
+	 * @param message
+	 * @param code
+	 */
+	public Status(final String value, final Integer code) {
+		super();
+		this.message = value;
+		this.code = code;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return this.message;
+	}
+
+	/**
+	 * @param message
+	 *            the message to set
+	 */
+	public void setMessage(final String value) {
+		this.message = value;
+	}
+
+	/**
+	 * @return the code
+	 */
+	public Integer getCode() {
+		return this.code;
+	}
+
+	/**
+	 * @param code
+	 *            the code to set
+	 */
+	public void setCode(final Integer code) {
+		this.code = code;
+	}
+}

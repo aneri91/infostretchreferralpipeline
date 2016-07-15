@@ -1,0 +1,26 @@
+package com.infostretch.referral.commons;
+
+import javax.xml.bind.annotation.XmlAttribute;
+
+public class LoginResponseDTO {
+  @XmlAttribute(name = "status")
+  private Status status;
+  @XmlAttribute(name = "data")
+  private DataDTO data;
+
+  public DataDTO getData() {
+    return this.data;
+  }
+
+  public Status getStatus() {
+    return this.status;
+  }
+
+  public void setData(final DataDTO data) {
+    this.data = data;
+  }
+
+  public void setStatus(final Status status) {
+    this.status = status;
+  }
+}

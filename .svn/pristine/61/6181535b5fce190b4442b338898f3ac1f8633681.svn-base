@@ -1,0 +1,18 @@
+package com.infostretch.referral.dao;
+
+import com.infostretch.referral.entity.User;
+import com.infostretch.referral.exception.RESTServiceException;
+
+public interface UserDao extends GenericDao<User> {
+
+  /**
+   * give the user id by username and password.
+   *
+   * @param uername
+   *          the uername
+   * @return the user id byusername
+   * @throws RESTServiceException
+   *           the REST service exception
+   */
+  public Integer getUserIdByusername(String uername) throws RESTServiceException;
+}

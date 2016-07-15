@@ -1,0 +1,39 @@
+package com.infostretch.referral.commons;
+
+
+/**
+ * Delivery Status Status Update DTO for delivery service
+ *
+ * @author aneri.parikh
+ *
+ */
+public class StatusDTO {
+
+	private Status status;
+
+	public StatusDTO(Integer code, String message) {
+		this.status = new Status(message, code);
+	}
+
+	/**
+	 * Construct default constructor
+	 */
+	public StatusDTO() {
+	}
+
+	/**
+	 * @return the status
+	 */
+	public Status getStatus() {
+		return this.status;
+	}
+
+	/**
+	 * @param status
+	 *            the status to set
+	 */
+	public void setStatus(final Status status) {
+		this.status = status;
+	}
+
+}

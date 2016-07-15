@@ -1,0 +1,31 @@
+package com.infostretch.referral.commons;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+public class LoginInputDTO {
+
+  @XmlAttribute(name = "username")
+  private String username;
+  @XmlAttribute(name = "password")
+  private String password;
+
+  public String getPassword() {
+    return this.password;
+  }
+
+  public String getUsername() {
+    return this.username;
+  }
+
+  public void setPassword(final String password) {
+    this.password = password;
+  }
+
+  public void setUsername(final String username) {
+    this.username = username;
+  }
+
+}

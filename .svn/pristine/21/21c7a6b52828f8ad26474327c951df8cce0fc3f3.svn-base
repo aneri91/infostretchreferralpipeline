@@ -1,0 +1,203 @@
+package com.infostretch.referral.services;
+
+import java.util.List;
+import java.util.Properties;
+
+import javax.naming.AuthenticationException;
+import javax.naming.Context;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
+import javax.naming.ldap.InitialLdapContext;
+import javax.naming.ldap.LdapContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.Validate;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.infostretch.referral.commons.DataDTO;
+import com.infostretch.referral.commons.LoginInputDTO;
+import com.infostretch.referral.commons.LoginResponseDTO;
+import com.infostretch.referral.commons.Status;
+import com.infostretch.referral.dao.RoleDao;
+import com.infostretch.referral.dao.UserDao;
+import com.infostretch.referral.dao.UserRoleDao;
+import com.infostretch.referral.entity.User;
+import com.infostretch.referral.entity.UserRoleMapping;
+import com.infostretch.referral.exception.RESTServiceException;
+import com.infostretch.referral.utilities.Constants;
+
+/**
+ * The Class LoginService.
+ */
+@Service
+public class LoginService {
+  /** The log. */
+  private static final Log LOG = LogFactory.getLog(LoginService.class);
+  /** The user dao. */
+  @Autowired
+  private UserDao userDao;
+
+  /** The user role dao. */
+  @Autowired
+  private UserRoleDao userRoleDao;
+
+  /** The role dao. */
+  @Autowired
+  private RoleDao roleDao;
+
+  /**
+   * Instantiates a new login service.
+   *
+   * @author pratik.oza
+   */
+  public LoginService() {
+  }
+
+  /**
+   * create new user.
+   *
+   * @param username
+   *          the username
+   * @param password
+   *          the password
+   * @param firstName
+   *          the first name
+   * @param lastName
+   *          the last name
+   * @param roleList
+   *          the role list
+   * @return userId
+   * @throws RESTServiceException
+   *           the REST service exception
+   */
+  public Integer saveUser(final String username, final String password, final String firstName,
+      final String lastName, final List<com.infostretch.referral.entity.Role> roleList)
+      throws RESTServiceException {
+    final User userEnity = new User();
+    userEnity.setName(username);
+    userEnity.setEmail(username);
+    userEnity.setFirstname(firstName);
+    userEnity.setLastname(lastName);
+    this.userDao.save(userEnity);
+    final UserRoleMapping userRole = new UserRoleMapping();
+    userRole.setRole(roleList.get(0));
+    userRole.setUser(userEnity);
+    // which saves user details
+    this.userRoleDao.save(userRole);
+    return userEnity.getId();
+  }
+
+  /**
+   * Validate ldap user.
+   *
+   * @param userName
+   *          the user name
+   * @param password
+   *          the password
+   * @return the login response dto
+   * @throws RESTServiceException
+   *           the REST service exception
+   */
+  public LoginResponseDTO validateLDAPUser(final String userName, final String password)
+      throws RESTServiceException {
+    LdapContext ctx = null;
+    final LoginResponseDTO respone = new LoginResponseDTO();
+    // LDAP validation, this will throw exception if not validated
+    try {
+      final Properties env = new Properties();
+      env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+      env.put(Context.SECURITY_AUTHENTICATION, "simple");
+      env.put(Context.SECURITY_PRINCIPAL, userName);
+      env.put(Context.SECURITY_CREDENTIALS, password);
+      env.put(Context.PROVIDER_URL, "ldap://vpn.infostretch.com:389");
+      ctx = new InitialLdapContext(env, null);
+      final SearchControls constraints = new SearchControls();
+      constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      final String[] attrIDs = { "sn", "givenname", "department" };
+      constraints.setReturningAttributes(attrIDs);
+      final NamingEnumeration<SearchResult> answer = ctx.search("DC=infostretch,DC=com",
+          "sAMAccountName=" + userName.substring(0, userName.indexOf("@infostretch.com")),
+          constraints);
+      if (answer.hasMore()) {
+        final Attributes attrs = answer.next().getAttributes();
+        final String firstName = attrs.get("givenname") != null ? attrs.get("givenname").get()
+            .toString() : "";
+        final String lastName = attrs.get("sn") != null ? attrs.get("sn").get().toString() : "";
+        final String department = attrs.get("department") != null ? attrs.get("department").get()
+            .toString() : "";
+        Integer userId = this.userDao.getUserIdByusername(userName);
+        if (userId == 0) {
+          final List<com.infostretch.referral.entity.Role> roleList = this.roleDao
+              .getRoleByRoleName("employee");
+          // create new user
+          if (!roleList.isEmpty()) {
+            userId = this.saveUser(userName, password, firstName, lastName, roleList);
+          }
+        }
+        final String role = this.userRoleDao.getRoleByUserId(userId);
+        respone.setStatus(new Status("success"));
+        respone.setData(new DataDTO(userName, department, userId, role));
+      }
+    } catch (final AuthenticationException e) {
+      LOG.error("Authentication Exception");
+      respone.setStatus(new Status("Unauthorized", 401));
+    } catch (final NamingException e) {
+      LOG.error("NamingException Exception");
+      respone.setStatus(new Status("Unauthorized",
+          HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION));
+    }
+    return respone;
+  }
+
+  /**
+   * Valid user.
+   *
+   * @param login
+   *          the login
+   * @return the login response dto
+   */
+  public LoginResponseDTO validUser(final LoginInputDTO login) {
+    LoginResponseDTO response = new LoginResponseDTO();
+    try {
+      Validate.notEmpty(login.getUsername(), "Invalid Username"); // validate
+      Validate.notEmpty(login.getPassword(), "Invalid Password");
+    } catch (final NullPointerException | IllegalArgumentException e) {
+      response.setStatus(new Status("invalid username or password",
+          HttpServletResponse.SC_BAD_REQUEST));
+      return response;
+    }
+    if (login.getUsername().equalsIgnoreCase(Constants.ROLE_HR_ADMIN)
+        || login.getUsername().equalsIgnoreCase(Constants.ROLE_SALES_ADMIN)) {
+      LOG.info("hr.admin | sales.admin");
+      try {
+        final List<User> userList = this.userDao.getUsersByUsernamePassword(login.getUsername(),
+            login.getPassword());
+        if (!userList.isEmpty()) {
+          response.setStatus(new Status("success"));
+          final String role = this.userRoleDao.getRoleByUserId(userList.get(0).getId());
+          response
+              .setData(new DataDTO(userList.get(0).getName(), "", userList.get(0).getId(), role));
+        } else {
+          response.setStatus(new Status("Unauthorized",
+              HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION));
+        }
+      } catch (final RESTServiceException re) {
+        response.setStatus(re.getStatus());
+      }
+    } else {
+      LOG.info("employee");
+      try {
+        response = this.validateLDAPUser(login.getUsername(), login.getPassword());
+      } catch (final RESTServiceException re) {
+        response.setStatus(re.getStatus());
+      }
+    }
+    return response;
+  }
+}

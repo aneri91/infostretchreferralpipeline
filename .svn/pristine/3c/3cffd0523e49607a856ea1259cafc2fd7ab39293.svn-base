@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+</head>
+
+<body>
+Hi Sales Admin,<br/>
+<br/>
+A new sales referral was made!<br/>
+<br/>
+Referred by: ${createdBy}<br/>
+Company Name: ${companyName} <br/>
+Contact Name: ${contactName} <br/>
+Email: ${email}<br/>
+Phone: ${phone}<br/>
+Comments: ${comments}<br/>
+Submitted On: ${createdOn}<br/>
+<br/>
+Thank you!
+ 
+</body>
+</html>

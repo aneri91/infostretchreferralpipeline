@@ -1,0 +1,10 @@
+package com.infostretch.referral.dao;
+
+import com.infostretch.referral.entity.EmployeeReferral;
+
+/**
+ * The Interface EmployeeReferralDao.
+ */
+public interface EmployeeReferralDao extends GenericDao<EmployeeReferral> {
+
+}

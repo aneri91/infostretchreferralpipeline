@@ -1,0 +1,106 @@
+package com.infostretch.referral.controller;
+
+import org.apache.commons.lang.Validate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.infostretch.referral.commons.SalesReferralDTO;
+import com.infostretch.referral.commons.SalesReferralResponseDTO;
+import com.infostretch.referral.commons.StatusDTO;
+import com.infostretch.referral.commons.UpdateSalesStatusRequestDTO;
+import com.infostretch.referral.services.SalesReferralService;
+
+/**
+ * The Class SalesReferralController.<br/>
+ * Validate<br/>
+ * saving Sales Referrals Informations<br/>
+ *
+ * @author aneri.parikh
+ *
+ */
+@Controller
+public class SalesReferralController {
+
+  /** The sales referral service. */
+  @Autowired
+  private SalesReferralService salesReferralService;
+
+  /**
+   * Instantiates a new sales referral controller.
+   */
+  public SalesReferralController() {
+  }
+
+  /**
+   * Save sales referral.
+   *
+   * @param salesReferralDTO
+   *          the sales referral dto
+   * @return the status dto
+   */
+  @RequestMapping(value = "/salesreferral", method = RequestMethod.POST,
+      consumes = "application/json")
+  @ResponseBody
+  public StatusDTO saveSalesReferral(@RequestBody final SalesReferralDTO salesReferralDTO) {
+    try {
+      // validation with mandatory fields
+      Validate.notNull(salesReferralDTO.getContactName(), "Invalid_contactName");
+      Validate.notNull(salesReferralDTO.getEmail(), "Invalid_email");
+      Validate.notNull(salesReferralDTO.getCompanyName(), "Invalid_companyName");
+      Validate.notNull(salesReferralDTO.getCreatedBy(), "Invalid_createdBy");
+
+    } catch (final NullPointerException | IllegalArgumentException e) {
+      return new StatusDTO(400, e.getMessage());
+    }
+    return this.salesReferralService.saveSalesReferral(salesReferralDTO);
+  }
+
+  /**
+   * Gets the sales referrals details.
+   *
+   * @param createdBy
+   *          the created by
+   * @param role
+   *          the role
+   * @return the sales referrals details
+   */
+  @RequestMapping(value = "/salesreferrals", method = RequestMethod.GET)
+  @ResponseBody
+  public SalesReferralResponseDTO getSalesReferralsDetails(@RequestParam(value = "createdBy",
+      required = false) final Integer createdBy,
+      @RequestParam(value = "role", required = false) final String role) {
+    return this.salesReferralService.getSalesReferrals(role, createdBy);
+  }
+
+  /**
+   * Update sales referral status.
+   *
+   * @param updateSalesStatusRequestDTO
+   *          the update sales status request dto
+   * @return the status dto
+   */
+  @RequestMapping(value = "/salesreferral/status", method = RequestMethod.PUT,
+      consumes = "application/json")
+  @ResponseBody
+  public StatusDTO updateSalesReferralStatus(
+      @RequestBody final UpdateSalesStatusRequestDTO updateSalesStatusRequestDTO) {
+    try {
+      // validation with mandatory fields
+      Validate.notNull(updateSalesStatusRequestDTO.getContactId(), "Invalid_contactId");
+      Validate.notNull(updateSalesStatusRequestDTO.getIsContact(), "Invalid_isContact");
+      Validate.notNull(updateSalesStatusRequestDTO.getIsViable(), "Invalid_isViable");
+      Validate.notNull(updateSalesStatusRequestDTO.getIsClose(), "Invalid_isClose");
+      Validate.notNull(updateSalesStatusRequestDTO.getUpdatedBy(), "Invalid_updatedBy");
+
+    } catch (final NullPointerException | IllegalArgumentException e) {
+      return new StatusDTO(400, e.getMessage());
+    }
+    return this.salesReferralService.updateSalesReferralStatus(updateSalesStatusRequestDTO);
+  }
+
+}

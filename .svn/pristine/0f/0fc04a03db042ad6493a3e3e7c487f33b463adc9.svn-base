@@ -1,0 +1,38 @@
+package com.infostretch.referral.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.springframework.stereotype.Repository;
+
+import com.infostretch.referral.entity.User;
+import com.infostretch.referral.exception.RESTServiceException;
+
+@Repository("userDao")
+public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
+
+  @PersistenceContext
+  private EntityManager entityManager;
+
+  public UserDaoImpl() {
+    super(User.class);
+  }
+
+  @Override
+  public Integer getUserIdByusername(final String username) throws RESTServiceException {
+    final Query query = this.entityManager
+        .createQuery(" SELECT u FROM User u WHERE u.name=:username ");
+    query.setParameter("username", username);
+    final List<User> userList = query.getResultList();
+    if (userList.size() > 0) {
+      return userList.get(0).getId();
+    } else {
+      return 0;
+    }
+
+  }
+
+}

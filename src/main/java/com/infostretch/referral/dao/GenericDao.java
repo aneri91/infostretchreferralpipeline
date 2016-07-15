@@ -1,0 +1,36 @@
+package com.infostretch.referral.dao;
+
+/**
+ * The Interface GenericDao.
+ *
+ * @param <T>
+ *          the generic type
+ */
+public interface GenericDao<T> {
+
+  /**
+   * Find by id.
+   *
+   * @param id
+   *          the id
+   * @return the t
+   */
+  T findById(Integer id);
+
+  /**
+   * Save.
+   *
+   * @param object
+   *          the object
+   */
+  void save(T object);
+
+  /**
+   * Update.
+   *
+   * @param object
+   *          the object
+   */
+  void update(T object);
+
+}

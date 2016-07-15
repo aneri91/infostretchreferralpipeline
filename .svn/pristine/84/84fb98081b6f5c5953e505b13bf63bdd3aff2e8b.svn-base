@@ -1,0 +1,432 @@
+package com.infostretch.referral.entity;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+/**
+ * The persistent class for the user database table.
+ *
+ */
+@Entity
+@Table(name = "user")
+@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+public class User implements Serializable {
+
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
+
+  /** The id. */
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(unique = true, nullable = false)
+  private int id;
+
+  /** The email. */
+  @Column(length = 200)
+  private String email;
+
+  /** The name. */
+  @Column(length = 200)
+  private String name;
+
+  /** The password. */
+  @Column(length = 200)
+  private String password;
+
+  /** The firstname. */
+  @Column(length = 100)
+  private String firstname;
+
+  /** The lastname. */
+  @Column(length = 100)
+  private String lastname;
+
+  /** The employee referrals1. */
+  // bi-directional many-to-one association to EmployeeReferral
+  @OneToMany(mappedBy = "createdBy")
+  private List<EmployeeReferral> employeeReferrals1;
+
+  /** The employee referrals2. */
+  // bi-directional many-to-one association to EmployeeReferral
+  @OneToMany(mappedBy = "updatedBy")
+  private List<EmployeeReferral> employeeReferrals2;
+
+  /** The sales referrals1. */
+  // bi-directional many-to-one association to SalesReferral
+  @OneToMany(mappedBy = "createdBy")
+  private List<SalesReferral> salesReferrals1;
+
+  /** The sales referrals2. */
+  // bi-directional many-to-one association to SalesReferral
+  @OneToMany(mappedBy = "updatedBy")
+  private List<SalesReferral> salesReferrals2;
+
+  /** The user role mappings. */
+  // bi-directional many-to-one association to UserRoleMapping
+  @OneToMany(mappedBy = "user")
+  private List<UserRoleMapping> userRoleMappings;
+
+  /**
+   * Instantiates a new user.
+   */
+  public User() {
+  }
+
+  /**
+   * Adds the employee referrals1.
+   *
+   * @param employeeReferrals1
+   *          the employee referrals1
+   * @return the employee referral
+   */
+  public EmployeeReferral addEmployeeReferrals1(final EmployeeReferral employeeReferrals1) {
+    this.getEmployeeReferrals1().add(employeeReferrals1);
+    employeeReferrals1.setCreatedBy(this);
+
+    return employeeReferrals1;
+  }
+
+  /**
+   * Adds the employee referrals2.
+   *
+   * @param employeeReferrals2
+   *          the employee referrals2
+   * @return the employee referral
+   */
+  public EmployeeReferral addEmployeeReferrals2(final EmployeeReferral employeeReferrals2) {
+    this.getEmployeeReferrals2().add(employeeReferrals2);
+    employeeReferrals2.setUpdatedBy(this);
+
+    return employeeReferrals2;
+  }
+
+  /**
+   * Adds the sales referrals1.
+   *
+   * @param salesReferrals1
+   *          the sales referrals1
+   * @return the sales referral
+   */
+  public SalesReferral addSalesReferrals1(final SalesReferral salesReferrals1) {
+    this.getSalesReferrals1().add(salesReferrals1);
+    salesReferrals1.setCreatedBy(this);
+
+    return salesReferrals1;
+  }
+
+  /**
+   * Adds the sales referrals2.
+   *
+   * @param salesReferrals2
+   *          the sales referrals2
+   * @return the sales referral
+   */
+  public SalesReferral addSalesReferrals2(final SalesReferral salesReferrals2) {
+    this.getSalesReferrals2().add(salesReferrals2);
+    salesReferrals2.setUpdatedBy(this);
+
+    return salesReferrals2;
+  }
+
+  /**
+   * Adds the user role mapping.
+   *
+   * @param userRoleMapping
+   *          the user role mapping
+   * @return the user role mapping
+   */
+  public UserRoleMapping addUserRoleMapping(final UserRoleMapping userRoleMapping) {
+    this.getUserRoleMappings().add(userRoleMapping);
+    userRoleMapping.setUser(this);
+
+    return userRoleMapping;
+  }
+
+  /**
+   * Gets the email.
+   *
+   * @return the email
+   */
+  public String getEmail() {
+    return this.email;
+  }
+
+  /**
+   * Gets the employee referrals1.
+   *
+   * @return the employee referrals1
+   */
+  public List<EmployeeReferral> getEmployeeReferrals1() {
+    return this.employeeReferrals1;
+  }
+
+  /**
+   * Gets the employee referrals2.
+   *
+   * @return the employee referrals2
+   */
+  public List<EmployeeReferral> getEmployeeReferrals2() {
+    return this.employeeReferrals2;
+  }
+
+  /**
+   * Gets the firstname.
+   *
+   * @return the firstname
+   */
+  public String getFirstname() {
+    return this.firstname;
+  }
+
+  /**
+   * Gets the id.
+   *
+   * @return the id
+   */
+  public int getId() {
+    return this.id;
+  }
+
+  /**
+   * Gets the lastname.
+   *
+   * @return the lastname
+   */
+  public String getLastname() {
+    return this.lastname;
+  }
+
+  /**
+   * Gets the name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return this.name;
+  }
+
+  /**
+   * Gets the password.
+   *
+   * @return the password
+   */
+  public String getPassword() {
+    return this.password;
+  }
+
+  /**
+   * Gets the sales referrals1.
+   *
+   * @return the sales referrals1
+   */
+  public List<SalesReferral> getSalesReferrals1() {
+    return this.salesReferrals1;
+  }
+
+  /**
+   * Gets the sales referrals2.
+   *
+   * @return the sales referrals2
+   */
+  public List<SalesReferral> getSalesReferrals2() {
+    return this.salesReferrals2;
+  }
+
+  /**
+   * Gets the user role mappings.
+   *
+   * @return the user role mappings
+   */
+  public List<UserRoleMapping> getUserRoleMappings() {
+    return this.userRoleMappings;
+  }
+
+  /**
+   * Removes the employee referrals1.
+   *
+   * @param employeeReferrals1
+   *          the employee referrals1
+   * @return the employee referral
+   */
+  public EmployeeReferral removeEmployeeReferrals1(final EmployeeReferral employeeReferrals1) {
+    this.getEmployeeReferrals1().remove(employeeReferrals1);
+    employeeReferrals1.setCreatedBy(null);
+
+    return employeeReferrals1;
+  }
+
+  /**
+   * Removes the employee referrals2.
+   *
+   * @param employeeReferrals2
+   *          the employee referrals2
+   * @return the employee referral
+   */
+  public EmployeeReferral removeEmployeeReferrals2(final EmployeeReferral employeeReferrals2) {
+    this.getEmployeeReferrals2().remove(employeeReferrals2);
+    employeeReferrals2.setUpdatedBy(null);
+
+    return employeeReferrals2;
+  }
+
+  /**
+   * Removes the sales referrals1.
+   *
+   * @param salesReferrals1
+   *          the sales referrals1
+   * @return the sales referral
+   */
+  public SalesReferral removeSalesReferrals1(final SalesReferral salesReferrals1) {
+    this.getSalesReferrals1().remove(salesReferrals1);
+    salesReferrals1.setCreatedBy(this);
+
+    return salesReferrals1;
+  }
+
+  /**
+   * Removes the sales referrals2.
+   *
+   * @param salesReferrals2
+   *          the sales referrals2
+   * @return the sales referral
+   */
+  public SalesReferral removeSalesReferrals2(final SalesReferral salesReferrals2) {
+    this.getSalesReferrals2().remove(salesReferrals2);
+    salesReferrals2.setUpdatedBy(null);
+
+    return salesReferrals2;
+  }
+
+  /**
+   * Removes the user role mapping.
+   *
+   * @param userRoleMapping
+   *          the user role mapping
+   * @return the user role mapping
+   */
+  public UserRoleMapping removeUserRoleMapping(final UserRoleMapping userRoleMapping) {
+    this.getUserRoleMappings().remove(userRoleMapping);
+    userRoleMapping.setUser(null);
+
+    return userRoleMapping;
+  }
+
+  /**
+   * Sets the email.
+   *
+   * @param email
+   *          the new email
+   */
+  public void setEmail(final String email) {
+    this.email = email;
+  }
+
+  /**
+   * Sets the employee referrals1.
+   *
+   * @param employeeReferrals1
+   *          the new employee referrals1
+   */
+  public void setEmployeeReferrals1(final List<EmployeeReferral> employeeReferrals1) {
+    this.employeeReferrals1 = employeeReferrals1;
+  }
+
+  /**
+   * Sets the employee referrals2.
+   *
+   * @param employeeReferrals2
+   *          the new employee referrals2
+   */
+  public void setEmployeeReferrals2(final List<EmployeeReferral> employeeReferrals2) {
+    this.employeeReferrals2 = employeeReferrals2;
+  }
+
+  /**
+   * Sets the firstname.
+   *
+   * @param firstname
+   *          the new firstname
+   */
+  public void setFirstname(final String firstname) {
+    this.firstname = firstname;
+  }
+
+  /**
+   * Sets the id.
+   *
+   * @param id
+   *          the new id
+   */
+  public void setId(final int id) {
+    this.id = id;
+  }
+
+  /**
+   * Sets the lastname.
+   *
+   * @param lastname
+   *          the new lastname
+   */
+  public void setLastname(final String lastname) {
+    this.lastname = lastname;
+  }
+
+  /**
+   * Sets the name.
+   *
+   * @param name
+   *          the new name
+   */
+  public void setName(final String name) {
+    this.name = name;
+  }
+
+  /**
+   * Sets the password.
+   *
+   * @param password
+   *          the new password
+   */
+  public void setPassword(final String password) {
+    this.password = password;
+  }
+
+  /**
+   * Sets the sales referrals1.
+   *
+   * @param salesReferrals1
+   *          the new sales referrals1
+   */
+  public void setSalesReferrals1(final List<SalesReferral> salesReferrals1) {
+    this.salesReferrals1 = salesReferrals1;
+  }
+
+  /**
+   * Sets the sales referrals2.
+   *
+   * @param salesReferrals2
+   *          the new sales referrals2
+   */
+  public void setSalesReferrals2(final List<SalesReferral> salesReferrals2) {
+    this.salesReferrals2 = salesReferrals2;
+  }
+
+  /**
+   * Sets the user role mappings.
+   *
+   * @param userRoleMappings
+   *          the new user role mappings
+   */
+  public void setUserRoleMappings(final List<UserRoleMapping> userRoleMappings) {
+    this.userRoleMappings = userRoleMappings;
+  }
+}

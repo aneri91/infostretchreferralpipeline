@@ -1,0 +1,12 @@
+package com.infostretch.referral.dao;
+
+import com.infostretch.referral.entity.SalesReferral;
+
+/**
+ * The Interface SalesReferralDao.
+ *
+ * @author aneri.parikh
+ */
+public interface SalesReferralDao extends GenericDao<SalesReferral> {
+
+}

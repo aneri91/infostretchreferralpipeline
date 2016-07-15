@@ -1,0 +1,39 @@
+package com.infostretch.referral.controller;
+
+import org.apache.commons.lang.Validate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.infostretch.referral.commons.SalesReferralDTO;
+import com.infostretch.referral.commons.StatusDTO;
+import com.infostretch.referral.services.SalesReferralService;
+
+@Controller
+public class SalesReferralController {
+
+	@Autowired
+	private SalesReferralService salesReferralService;
+
+	@RequestMapping(value = "/salesreferral", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseBody
+	public StatusDTO saveSalesReferral(
+			@RequestBody SalesReferralDTO salesReferralDTO) {
+		try {
+			Validate.notNull(salesReferralDTO.getContactName(),
+					"Enter contact name");
+			Validate.notNull(salesReferralDTO.getEmail(),
+					"Enter email ");
+			Validate.notNull(salesReferralDTO.getPhone(),
+					"Enter phone number ");
+
+		} catch (final NullPointerException | IllegalArgumentException e) {
+			return new StatusDTO(400,e.getMessage());
+		}
+		return salesReferralService.saveSalesReferral(salesReferralDTO);
+	}
+
+}

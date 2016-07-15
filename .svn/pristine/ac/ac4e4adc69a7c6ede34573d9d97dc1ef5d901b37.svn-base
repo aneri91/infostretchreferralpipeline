@@ -1,0 +1,57 @@
+package com.infostretch.referral.commons;
+
+import java.util.List;
+
+/**
+ * The Class EmployeeReferralResponseDTO.
+ */
+public class EmployeeReferralResponseDTO {
+  
+  /** The status. */
+  private Status status;
+  
+  /** The data. */
+  private List<EmployeeReferralDetails> data;
+  
+  /**
+   * Instantiates a new employee referral response dto.
+   */
+  public EmployeeReferralResponseDTO() {
+  }
+  /**
+   * Gets the status.
+   *
+   * @return the status
+   */
+  public Status getStatus() {
+    return status;
+  }
+  
+  /**
+   * Sets the status.
+   *
+   * @param status the new status
+   */
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+  
+  /**
+   * Gets the data.
+   *
+   * @return the data
+   */
+  public List<EmployeeReferralDetails> getData() {
+    return data;
+  }
+  
+  /**
+   * Sets the data.
+   *
+   * @param data the new data
+   */
+  public void setData(List<EmployeeReferralDetails> data) {
+    this.data = data;
+  }
+  
+}

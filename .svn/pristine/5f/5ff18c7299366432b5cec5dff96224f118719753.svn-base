@@ -1,0 +1,9 @@
+package com.infostretch.referral.dao;
+
+public interface GenericDao<T> {
+
+	public void save(T object);
+	
+	public T findById(Integer id);
+
+}

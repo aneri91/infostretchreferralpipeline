@@ -1,0 +1,173 @@
+package com.infostretch.referral.entity;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+
+
+/**
+ * The persistent class for the sales_referral database table.
+ * 
+ */
+@Entity
+@Table(name="sales_referral")
+@NamedQuery(name="SalesReferral.findAll", query="SELECT s FROM SalesReferral s")
+public class SalesReferral implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	private String comments;
+
+	@Column(name="company_name", length=500)
+	private String companyName;
+
+	@Column(name="contact_name", length=200)
+	private String contactName;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="created_on")
+	private Date createdOn;
+
+	@Column(length=200)
+	private String email;
+
+	@Column(name="is_close")
+	private boolean isClose;
+
+	@Column(name="is_contact")
+	private boolean isContact;
+
+	@Column(name="is_viable")
+	private boolean isViable;
+
+	@Column(length=20)
+	private String phone;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="updated_on")
+	private Date updatedOn;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="created_by")
+	private User createdBy;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="updated_by")
+	private User updatedBy;
+
+	public SalesReferral() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Object getComments() {
+		return this.comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public String getCompanyName() {
+		return this.companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getContactName() {
+		return this.contactName;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+	}
+
+	public Date getCreatedOn() {
+		return this.createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Object getIsClose() {
+		return this.isClose;
+	}
+
+	public void setIsClose(boolean isClose) {
+		this.isClose = isClose;
+	}
+
+	public Object getIsContact() {
+		return this.isContact;
+	}
+
+	public void setIsContact(boolean isContact) {
+		this.isContact = isContact;
+	}
+
+	public Object getIsViable() {
+		return this.isViable;
+	}
+
+	public void setIsViable(boolean isViable) {
+		this.isViable = isViable;
+	}
+
+	public String getPhone() {
+		return this.phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Date getUpdatedOn() {
+		return this.updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public User getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(User updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	
+
+}

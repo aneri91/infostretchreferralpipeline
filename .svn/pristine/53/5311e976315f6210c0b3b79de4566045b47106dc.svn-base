@@ -1,0 +1,87 @@
+package com.infostretch.referral.services;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.velocity.VelocityEngineUtils;
+
+import com.infostretch.referral.commons.EmployeeReferralDTO;
+import com.infostretch.referral.commons.Status;
+import com.infostretch.referral.commons.StatusDTO;
+import com.infostretch.referral.dao.EmployeeReferralDao;
+import com.infostretch.referral.dao.UserDao;
+import com.infostretch.referral.entity.EmployeeReferral;
+import com.infostretch.referral.entity.User;
+import com.infostretch.referral.utilities.SendMail;
+
+/**
+ * The Class EmployeeReferralService.
+ */
+@Service
+public class EmployeeReferralService {
+
+  /** The employee referral dao. */
+  @Autowired
+  private EmployeeReferralDao employeeReferralDao;
+
+  /** The user dao. */
+  @Autowired
+  private UserDao userDao;
+
+  /** The velocity engine. */
+  @Autowired
+  private VelocityEngine velocityEngine;
+
+  /** The send mail. */
+  @Autowired
+  private SendMail sendMail;
+
+  /**
+   * Instantiates a new employee referral service.
+   */
+  public EmployeeReferralService() {
+  }
+
+  /**
+   * Save employee referral.
+   *
+   * @param employeeReferralDTO
+   *          the employee referral dto
+   * @return the status dto
+   */
+  public StatusDTO saveEmployeeReferral(final EmployeeReferralDTO employeeReferralDTO) {
+    final StatusDTO status = new StatusDTO();
+    final EmployeeReferral employeeReferral = new EmployeeReferral();
+    employeeReferral.setCandidateName(employeeReferralDTO.getCandidateName());
+    employeeReferral.setEmail(employeeReferralDTO.getEmail());
+    employeeReferral.setLinkedinUrl(employeeReferralDTO.getLinkedinUrl());
+    employeeReferral.setPhone(employeeReferralDTO.getPhone());
+    employeeReferral.setCreatedOn(new Date());
+    employeeReferral.setUpdatedOn(new Date());
+    final User createdBy = this.userDao.findById(employeeReferralDTO.getCreatedBy());
+    employeeReferral.setCreatedBy(createdBy);
+    this.employeeReferralDao.save(employeeReferral);
+    final Map<String, Object> model = new HashMap<String, Object>();
+
+    model.put("candidateName", employeeReferralDTO.getCandidateName());
+    model.put("email", employeeReferralDTO.getEmail());
+    model.put("phone", employeeReferralDTO.getPhone());
+    model.put("linkedinUrl", employeeReferralDTO.getLinkedinUrl());
+    model.put("createdOn", employeeReferral.getCreatedOn());
+    model.put("createdBy", createdBy.getFirstname() + " " + createdBy.getLastname());
+
+    final String body = VelocityEngineUtils.mergeTemplateIntoString(this.velocityEngine,
+        "/templates/employeeReferralTemplate.vm", "UTF-8", model);
+    final String[] to = { "pratik.oza@infostretch.com", "aneri.parikh@infostretch.com",
+        "vaibhavi.joshi@infostretch.com", "mudita.tiwari@infostretch.com",
+    "pooja.arondekar@infostretch.com" };
+    this.sendMail.sendEmail(to, body, "aneri.parikh@infostretch.com", "New Referral Information");
+    status.setStatus(new Status("success"));
+    return status;
+
+  }
+}

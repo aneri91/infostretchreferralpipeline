@@ -1,0 +1,138 @@
+package com.infostretch.referral.commons;
+
+import java.util.Date;
+
+public class EmployeeReferralDTO {
+
+	private int id;
+
+	private String candidateName;
+
+	private Date createdOn;
+
+	private String email;
+
+	private boolean isAttachment;
+
+	private boolean isClose;
+
+	private boolean isContact;
+
+	private boolean isViable;
+
+	private String linkedinUrl;
+
+	private String phone;
+
+	private Date updatedOn;
+
+	private Integer createdBy;
+
+	private Integer updatedBy;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getCandidateName() {
+		return candidateName;
+	}
+
+	public void setCandidateName(String candidateName) {
+		this.candidateName = candidateName;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public boolean isAttachment() {
+		return isAttachment;
+	}
+
+	public void setAttachment(boolean isAttachment) {
+		this.isAttachment = isAttachment;
+	}
+
+	public boolean isClose() {
+		return isClose;
+	}
+
+	public void setClose(boolean isClose) {
+		this.isClose = isClose;
+	}
+
+	public boolean isContact() {
+		return isContact;
+	}
+
+	public void setContact(boolean isContact) {
+		this.isContact = isContact;
+	}
+
+	public boolean isViable() {
+		return isViable;
+	}
+
+	public void setViable(boolean isViable) {
+		this.isViable = isViable;
+	}
+
+	public String getLinkedinUrl() {
+		return linkedinUrl;
+	}
+
+	public void setLinkedinUrl(String linkedinUrl) {
+		this.linkedinUrl = linkedinUrl;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
+
+}
