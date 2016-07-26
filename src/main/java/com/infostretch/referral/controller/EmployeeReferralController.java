@@ -44,8 +44,8 @@ public class EmployeeReferralController {
    */
   @RequestMapping(value = "/employeereferrals", method = RequestMethod.GET)
   @ResponseBody
-  public EmployeeReferralResponseDTO getEmployeeReferralsDetail(
-      @RequestParam(value = "createdBy", required = false) final Integer createdBy,
+  public EmployeeReferralResponseDTO getEmployeeReferralsDetail(@RequestParam(value = "createdBy",
+      required = false) final Integer createdBy,
       @RequestParam(value = "role", required = false) final String role) {
     return this.employeeReferralService.getEmployeeReferral(createdBy, role);
   }
@@ -60,8 +60,7 @@ public class EmployeeReferralController {
   @RequestMapping(value = "/employeereferral", method = RequestMethod.POST,
       consumes = "application/json")
   @ResponseBody
-  public StatusDTO saveEmployeeReferral(
-      @RequestBody final EmployeeReferralDTO employeeReferralDTO) {
+  public StatusDTO saveEmployeeReferral(@RequestBody final EmployeeReferralDTO employeeReferralDTO) {
     try {
       // validation with mandatory fields
       Validate.notNull(employeeReferralDTO.getCandidateName(), "Invalid_candidateName");
