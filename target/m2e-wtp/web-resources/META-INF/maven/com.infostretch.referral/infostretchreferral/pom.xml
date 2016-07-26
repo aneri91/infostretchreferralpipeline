@@ -132,7 +132,7 @@
 				<configuration>
 					<url>http://localhost:9090/manager</url>
 					<server>TomcatServer</server>
-					<path>/infostretchreferral</path>
+					<path>/infostretchreferralpipeline</path>
 				</configuration>
 			</plugin>
 		</plugins>
