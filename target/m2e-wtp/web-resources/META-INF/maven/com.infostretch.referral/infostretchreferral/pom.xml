@@ -141,7 +141,7 @@
 				<configuration>
 					<url>http://localhost:9090/manager/html</url>
 					<server>TomcatServer</server>
-					<path>/erpa</path>
+					<path>/infostretchreferral</path>
 					<username>tomcat</username>
 					<password>tomcat</password>
 				</configuration>
